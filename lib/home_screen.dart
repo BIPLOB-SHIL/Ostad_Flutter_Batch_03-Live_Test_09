@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/services.dart' as rootBundle;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:livetest09/data_model.dart';
 
-import 'data_model.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -18,8 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   bool inProgress = false;
-  List<DataModel> modelData =[];
-
+  List<DataModel> listDataModel=[];
   @override
   void initState() {
     super.initState();
@@ -27,28 +26,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
-  Future<List<DataModel>> readJsonData() async {
-    //read json file
-    final jsonData = await rootBundle.rootBundle.loadString('assets/json/food_recipes.json');
-    //decode json data as list
-    final list = json.decode(jsonData);
-    print(jsonData);
-    //map json and initialize using DataModel
-    return list.map((e) => DataModel.fromJson(e)).toList();
+  readJsonData() async {
+    final jsonData =
+        await rootBundle.loadString("assets/json/food_recipes.json");
+    final decodeData = jsonDecode(jsonData);
+    final productData = decodeData["recipes"];
+    listDataModel = List.from(productData)
+        .map<DataModel>((dataModel) => DataModel.fromMap(dataModel))
+        .toList();
+    setState(() {
 
+    });
   }
-
-  // Future<List<DataModel>> allUsers() async {
-  //   var response = await rootBundle.loadString("assets/food_recipes.json");
-  //
-  //   if (response.isNotEmpty) {
-  //     return usersFromJson(response);
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
          // backgroundColor: Colors.white,
         ),
         body:ListView.builder(
-                     itemCount: 10,
+                     itemCount: listDataModel.length,
                      itemBuilder: (context, index){
                        return  ListTile(
                            leading: const Icon(Icons.no_food),
-                           title: Text("jgygyg"),
-                           subtitle: Text("jnfvjfbn"),
+                           title: Text(listDataModel[index].title),
+                           subtitle: Text(listDataModel[index].description),
                        );
 
 

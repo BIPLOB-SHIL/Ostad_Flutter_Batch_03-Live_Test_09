@@ -1,22 +1,21 @@
 class DataModel {
-  late String title;
-  late  String description;
-  late  List<String> ingredients;
+  final String title;
+  final  String description;
 
-  DataModel(this.title, this.description, this.ingredients);
 
-  DataModel.fromJson(Map<String,dynamic> json)
-  {
-    title = json['title'];
-    description =json['description'];
-    ingredients = json['ingredients'];
+  DataModel({ required this.title, required this.description});
+
+  factory DataModel.fromMap(Map<String,dynamic> json){
+    return DataModel(
+      title: json["title"],
+      description: json["description"],
+    );
   }
 
   Map<String,dynamic> toMap(){
     return {
       "title" : title,
       "description": description,
-      "ingredients": ingredients,
 
     };
 }
